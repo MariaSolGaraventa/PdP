@@ -40,8 +40,7 @@ atiendeEnElHorario(Persona, Dia, Hora) :-
 foreverAlone(Persona, Dia, Hora) :-
     atiendeEnElHorario(Persona, Dia, Hora),
     responsable(OtraPersona),
-    not(atiendeEnElHorario(OtraPersona, Dia, Hora)),
-    Persona \= OtraPersona.                     %REVISAR ultimo caso
+    not((atiendeEnElHorario(OtraPersona, Dia, Hora), Persona \= OtraPersona)).
 
 % ----------- 4
 diasDeAtencion(Dia, Persona) :-
@@ -56,29 +55,20 @@ venta(bebida, Tipo, Cantidad).
 */
 ventas(dodain, momento(lunes, 10), [venta(golosinas, 1200), venta(cigarrillos, jockey), venta(golosinas, 50)]).
 ventas(dodain, momento(miercoles, 12), [venta(bebida, alcoholica, 8), venta(bebida, noAlcoholica, 1), venta(golosinas, 10)]).
-ventas(martu, momento(miercoles, 12), [venta(golosinas, 1000), venta(cigarrillos, chesterfield), venta(cigarrillos, colorado), venta(cigarrillos, parisiennes)]).
+ventas(martu, momento(miercoles, 12), [venta(golosinas, 1000), venta(cigarrillos, [chesterfield, colorado, parisiennes])]).
 ventas(lucas, momento(martes, 11), [venta(golosinas, 600)]).
-ventas(lucas, momento(martes, 18), [venta(bebida, noAlcoholica, 2), venta(cigarrillos, derby)]).
+ventas(lucas, momento(martes, 18), [venta(bebida, noAlcoholica, 2), venta(cigarrillos, [derby])]).
 
 esSuertuda(Persona) :-
     turno(Persona, Dia, _),
-    forall(ventas(Persona, momento(Dia, _), Ventas), nth1(1, Ventas, Venta)),
-    laPrimeraVentaCumple(Persona, Ventas).
+    forall(ventas(Persona, momento(Dia, _), [Venta|_]), laPrimeraVentaCumple(Venta)).
 
-laPrimeraVentaCumple(Persona, venta(golosina, _)) :-
-    ventas(Persona, _, venta(golosina, Importe)),
-    Importe > 100.
+laPrimeraVentaCumple(venta(golosina, Importe)) :- Importe > 100.
 
-/*
-laPrimeraVentaCumple(Persona, venta(cigarrilos, Marca)) :-
-    ventas(Persona, _, venta(cigarrillos, Marca)),
-*/
+laPrimeraVentaCumple(venta(cigarrillos, Marcas)) :- length(Marcas, Cantidad), Cantidad > 2.
 
-laPrimeraVentaCumple(Persona, venta(bebida, _, _)) :-
-    ventas(Persona, _, venta(bebida, alcoholica, _)).
+laPrimeraVentaCumple(venta(bebida, alcoholica, _)).
 
-    laPrimeraVentaCumple(Persona, venta(bebida, _, _)) :-
-        ventas(Persona, _, venta(bebida, noAlcoholica, Cantidad)),
-        Cantidad > 5.
+laPrimeraVentaCumple(venta(bebida, noAlcoholica, Cantidad)) :- Cantidad > 5.
 
 
