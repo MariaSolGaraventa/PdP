@@ -23,6 +23,7 @@ import persona.*
  
  class EnfermedadInfecciosa {
  	var property cantidadCelulasAmenazadas
+  // puedo NO ponerle el property y hacer el getter, que es lo único que necesito
  	
  	method efecto(unaPersona) {
  		if(unaPersona.temperaturaActual() < 45) {
@@ -33,9 +34,11 @@ import persona.*
  	}
  	
  	method reproducirse() {
- 		var nuevaCantidad
- 		nuevaCantidad = cantidadCelulasAmenazadas * 2
- 		self.cantidadCelulasAmenazadas(nuevaCantidad)
+   // mejor:
+   cantidadCelulasAmenazadas *= 2
+ 		//var nuevaCantidad
+ 		//nuevaCantidad = cantidadCelulasAmenazadas * 2
+ 		//self.cantidadCelulasAmenazadas(nuevaCantidad)
  	}
  	
  	method agresividad(paraUnaPersona) {
