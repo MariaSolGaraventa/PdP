@@ -22,7 +22,7 @@ class Persona {
 
 	method vivirUnDia(_i) {
 		if(enfermedades != #{} && coma == false) {
-			self.enfermedades().fold(self.enfermedades().anyOne(), {_acum, 
+			self.enfermedades().fold(self.enfermedades().anyOne(), {self.enfermedades(), 
 				enfermedad => enfermedad.efecto(self)
 			})
 			cantidadDiasAfectada += 1
