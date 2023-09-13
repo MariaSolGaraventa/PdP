@@ -11,6 +11,10 @@ class Persona {
 	var property coma = false
 	var property enfermedades = #{}
 	var property cantidadDiasAfectada
+
+        method contraerEnfermedad(unaEnfermedad) {
+                enfermedades().add(unaEnfermedad)
+	}
 		
 	method aumentarTemperatura(proporcion, cantidad) {
 		temperaturaActual += proporcion * cantidad
