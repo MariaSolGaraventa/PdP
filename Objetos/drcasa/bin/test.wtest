@@ -1,0 +1,64 @@
+import persona.*
+import enfermedades.*
+
+describe "Testsitos" {
+	
+	var malaria1
+	var otitis
+	var lupus
+	var malaria2
+	var logan
+	var frank
+	
+	method initialize() {
+		malaria1 = new EnfermedadInfecciosa(cantidadCelulasAmenazadas = 500)	
+		otitis = new EnfermedadInfecciosa(cantidadCelulasAmenazadas = 100)
+		malaria2 = new EnfermedadInfecciosa(cantidadCelulasAmenazadas = 800)
+		lupus = new EnfermedadAutoinmune(cantidadCelulasAmenazadas = 10000)
+		logan = new Persona(temperaturaActual = 36, cantidadCelulasTotales = 3000000, enfermedades = #{malaria1, otitis, lupus}, cantidadDiasAfectada = 0)
+		frank = new Persona(temperaturaActual = 36, cantidadCelulasTotales = 3500000, enfermedades = #{}, cantidadDiasAfectada = 0)
+	}
+	
+	
+	test "Test 1 - Frank contrae malaria2" {
+		frank.enfermedades().add(malaria2)
+		assert.equals(#{malaria2}, frank.enfermedades())
+	}
+
+	test "Test 2 - La malaria de Logan se reproduce" {
+		malaria1.reproducirse()
+		assert.equals(1000, malaria1.cantidadCelulasAmenazadas())
+	}
+	
+	test "Test 3.1 - Verificar la enfermedad que más células afecta de Logan" {
+		var maximo
+		maximo = logan.enfermedades().max({
+			enfermedad => enfermedad.cantidadCelulasAmenazadas()
+		})
+		assert.equals(lupus, maximo)
+	}
+
+	test "Test 3.2 - Verificar si Logan está en coma" {
+		var valor
+		valor = logan.coma() == true
+		assert.equals(false, valor)	
+		}
+		
+	test "Test 3.3 - Verificar la cantidad de celulas de Logan afectadas por enfermedades agresivas" {
+		var suma
+		suma = logan.enfermedades().sum({
+			enfermedad => enfermedad.cantidadCelulasAmenazadas()
+		})
+		assert.equals(10600, suma)	
+	}
+	
+	test "Test 4 - Hacer que Logan pase 31 días y verificar las consultas anteriores" {
+		var valor
+		logan.cantidadDiasAfectada(0)
+		31.times({ 
+			i => logan.vivirUnDia(i)
+		})
+		valor = logan.coma() == true
+		assert.equals(true, valor)	
+	}
+}
