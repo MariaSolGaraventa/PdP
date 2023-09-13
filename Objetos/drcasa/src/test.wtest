@@ -21,7 +21,7 @@ describe "Testsitos" {
 	
 	
 	test "Test 1 - Frank contrae malaria2" {
-		frank.enfermedades().add(malaria2)
+		frank.contraerEnfermedad(malaria2)
 		assert.equals(#{malaria2}, frank.enfermedades())
 	}
 
