@@ -6,26 +6,71 @@
  */
 
 class Persona {
-	var property temperaturaActual
-	var property cantidadCelulasTotales
-	var property coma = false
-	var property enfermedades = #{}
-	var property cantidadDiasAfectada
+	var temperaturaActual
+	var celulasTotales
+	const enfermedades = #{}
 
-        method contraerEnfermedad(unaEnfermedad) {
-                enfermedades().add(unaEnfermedad)
+	method temperaturaActual() {
+		return temperaturaActual	
 	}
-		
+	
+	method celulasTotales() {
+		return celulasTotales
+	}
+	
+	method enfermedades() {
+		return enfermedades
+	}
+	
+    method contraerEnfermedad(unaEnfermedad) {
+        enfermedades().add(unaEnfermedad)
+	}
+
 	method aumentarTemperatura(proporcion, cantidad) {
 		temperaturaActual += proporcion * cantidad
 	}
 
-	method vivirUnDia(_i) {
-		if(enfermedades != #{} && coma == false) {
-			self.enfermedades().fold(self.enfermedades().anyOne(), {self.enfermedades(), 
-				enfermedad => enfermedad.efecto(self)
-			})
-			cantidadDiasAfectada += 1
-		}
+	method vivirUnDia() {
+		self.enfermedades().forEach({
+			enfermedad => enfermedad.efecto(self)
+		})
 	}
+	
+	method estaEnComa() {
+		return temperaturaActual > 45 || celulasTotales < 1000000
+	}
+	
+	method perderCelulas(cantidad) {
+		celulasTotales -= cantidad
+	}
+		
+    method enfermedadMasAmenazante() {
+    	return enfermedades.max({ 
+    		enfermedad => enfermedad.cantidadCelulasAmenazadas()
+    	})
+    }
+    
+    method enfermedadesAgresivas() {
+        return enfermedades.filter({ 
+        	enfermedad => enfermedad.agresividad(self)
+        })
+    }
+    
+    method vivirDias(unosDias) {
+        unosDias.times({ 
+        	dia => self.vivirUnDia()
+        })
+    }
+    
+        method medicateCon(unaDosis) {
+        enfermedades.forEach { enfermedad => enfermedad.atenuatePara(self, unaDosis) }
+    }
+
+    method curarseDe(unaEnfermedad) {
+        enfermedades.remove(unaEnfermedad)
+    }
+    
+    method morir() {
+        temperaturaActual = 0
+    }
 }

@@ -1,5 +1,6 @@
 import persona.*
-import enfermedades.*
+import infecciosa.*
+import autoinmune.*
 
 describe "Testsitos" {
 	
@@ -11,12 +12,12 @@ describe "Testsitos" {
 	var frank
 	
 	method initialize() {
-		malaria1 = new EnfermedadInfecciosa(cantidadCelulasAmenazadas = 500)	
-		otitis = new EnfermedadInfecciosa(cantidadCelulasAmenazadas = 100)
-		malaria2 = new EnfermedadInfecciosa(cantidadCelulasAmenazadas = 800)
-		lupus = new EnfermedadAutoinmune(cantidadCelulasAmenazadas = 10000)
-		logan = new Persona(temperaturaActual = 36, cantidadCelulasTotales = 3000000, enfermedades = #{malaria1, otitis, lupus}, cantidadDiasAfectada = 0)
-		frank = new Persona(temperaturaActual = 36, cantidadCelulasTotales = 3500000, enfermedades = #{}, cantidadDiasAfectada = 0)
+		malaria1 = new EnfermedadInfecciosa(celulasAmenazadas = 500)	
+		otitis = new EnfermedadInfecciosa(celulasAmenazadas = 100)
+		malaria2 = new EnfermedadInfecciosa(celulasAmenazadas = 800)
+		lupus = new EnfermedadAutoinmune(celulasAmenazadas = 10000, diasAfectando = 0)
+		logan = new Persona(temperaturaActual = 36, celulasTotales = 3000000, enfermedades = #{malaria1, otitis, lupus})
+		frank = new Persona(temperaturaActual = 36, celulasTotales = 3500000, enfermedades = #{})
 	}
 	
 	
@@ -56,7 +57,7 @@ describe "Testsitos" {
 		var valor
 		logan.cantidadDiasAfectada(0)
 		31.times({ 
-			i => logan.vivirUnDia(i)
+			_i => logan.vivirUnDia()
 		})
 		valor = logan.coma() == true
 		assert.equals(true, valor)	
