@@ -43,7 +43,7 @@ class Bomb inherits Pajaro {
 
     override method obtenerFuerza() {
         if(self.estoyDentroDelLimite()) {
-            return iraPor(2)
+            return self.iraPor(2)
         }
     }
 
@@ -84,19 +84,6 @@ class Matilda inherits Pajaro {
     }
 }
 
-class Red inherits Pajaro {
-    var cantidadEnojadas = 0
-
-    override method obtenerFuerza() {
-        return self.ira() * 10 * cantidadEnojadas
-    }
-
-    override method enojarse() {
-        cantidadEnojadas += 1
-        super()
-    }
-}
-
 class Terence inherits Pajaro {
     var cantidadEnojadas = 0
     var property multiplicador 
@@ -109,6 +96,10 @@ class Terence inherits Pajaro {
         cantidadEnojadas += 1
         super()
     }
+}
+
+class Red inherits Terence(multiplicador = 10){
+
 }
 
 /*
