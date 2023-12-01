@@ -47,17 +47,19 @@ esUnItemComestible(Items, Item) :-
 
 cantidadDeItem(Item, UnJugador, Cantidad) :-
     jugador(UnJugador, Items, _),
-    findall(Item, tiene(Items, Item), ListaDeEseItem),
+    tieneItem(_, Item),
+    findall(Item, tieneItem(UnJugador, Item), ListaDeEseItem),
     length(ListaDeEseItem, Cantidad).
-
-tiene(SusItems, ElItem) :-
-    member(ElItem, SusItems).
 
 % d. Relacionar un jugador con un ítem, si de entre todos los jugadores, es el que más cantidad tiene de ese ítem. tieneMasDe/2
 
 tieneMasDe(UnItem, UnJugador) :-
     cantidadDeItem(UnItem, UnJugador, Cantidad),
-    forall(cantidadDeItem(UnItem, OtroJugador, OtraCantidad), Cantidad > OtraCantidad),
+    forall(cantidadDeItemDeOtroJugador(UnItem, UnJugador, OtroJugador, OtraCantidad), Cantidad >= OtraCantidad).
+
+
+cantidadDeItemDeOtroJugador(UnItem, UnJugador, OtroJugador, OtraCantidad) :-
+    cantidadDeItem(UnItem, OtroJugador, OtraCantidad), 
     OtroJugador \= UnJugador.
 
 % Punto 2
