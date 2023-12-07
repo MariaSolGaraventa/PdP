@@ -28,7 +28,7 @@ class Guerrero {
     }
 
     method incrementarExperiencia() {
-        nivelDeExperiencia = 1 * traje.multiplicarExperiencia
+        nivelDeExperiencia = 1 * traje.multiplicadorExperiencia()
     }
 
     method comerSemillaErmitanio() {
@@ -64,7 +64,7 @@ class Saiyan inherits Guerrero {
     }
 
     method unoPorcientoDeLaEnergiaOriginal() {
-        return energiaMaxima * 0,1
+        return energiaMaxima * 0,01
     }
 
     override method comerSemillaErmitanio() {
@@ -74,25 +74,32 @@ class Saiyan inherits Guerrero {
 }
 
 object saiyanBase {
-    const property multiplicadorResistencia = 0
+
+    method multiplicadorResistencia() {
+        return 0
+    }
 }
 
 object saiyanUno {
-    const property multiplicadorResistencia = 0,05
+
+    method multiplicadorResistencia() {
+        return 0,05
+    }
 }
 
 object saiyanDos {
-    const property multiplicadorResistencia = 0,07
+
+    method multiplicadorResistencia() {
+        return 0,07
+    }
 }
 
 object saiyanTres {
-    const property multiplicadorResistencia = 0,15
+
+    method multiplicadorResistencia() {
+        return 0,15
+    }
 }
-
-
-
-
-
 
 
 class TrajePrefabricado {
@@ -100,7 +107,7 @@ class TrajePrefabricado {
     var nivelDeDesgaste = 0
     const property cantidadDeElementosEnSuTraje = 1
     
-    method multiplicarExperiencia() {
+    method multiplicadorExperiencia() {
         return self.multiplicador()
     }
 
@@ -122,20 +129,34 @@ class TrajePrefabricado {
 }
 
 class Comun inherits TrajePrefabricado {
-    const property multiplicador = 1
-    const porcentajeProteccion
+
+    method porcentajeProteccion() {
+        return proteccionParaComunes.porcentajeProteccion()
+    }
+
+    method multiplicador() {
+        return 1
+    }
+}
+
+object proteccionParaComunes {
+    var porcentajeProteccion
 }
 
 class Entrenamiento inherits TrajePrefabricado {
-    var property multiplicador = 2
+    var multiplicador = 2
     const porcentajeProteccion = 0
+
+    method multiplicador() {
+        return multiplicador
+    }
 }
 
 class Modularizado {
     const guerrero
     const property piezas // es un set de instancias de Pieza
 
-    method multiplicarExperiencia() {
+    method multiplicadorExperiencia() {
         return 1 - (self.cantidadDeElementosEnSuTraje() - self.cantidadPiezasGastadas())
     }
 
@@ -183,11 +204,8 @@ class Pieza {
 }
 
 
-
-
-
 class Pelea {
-    const modalidad // apunta a un WKO PowerlsBest ó Funny ó Surprise
+    const modalidad // apunta a un WKO PowerIsBest ó Funny ó Surprise
     const jugadores = #{}
 
     method agregarJugadores(cantidad) {
@@ -196,26 +214,43 @@ class Pelea {
 }
 
 
-object powerlsBest {
-    const guerreros
+object powerIsBest {
 
     method agregarJugador() {
-        return self.guerreros().max{ guerrero => guerrero.potencialOfensivo()}
+        return guerrerosExistentes.elMasFuerte()
     }
 }
 
 object funny {
-    const guerreros
 
     method agregarJugador() {
-        return self.guerreros().max { guerrero => guerrero.cantidadDeElementosEnSuTraje()}
+        return guerrerosExistentes.elQueMasElementosTiene()
     }
 }
 
 object surprise {
-    const guerreros
 
     method agregarJugador() {
+        return guerrerosExistentes.tirameCualquiera()
+    }
+}
+
+object guerrerosExistentes {
+    const property guerreros
+
+    method elMasFuerte() {
+        return self.elGuerreroConMas(potencialOfensivo())
+    }
+
+    method elQueMasElementosTiene() {
+        return self.elGuerreroConMas(cantidadDeElementosEnSuTraje())
+    }
+
+    method elGuerreroConMas(criterio) {
+        return self.guerreros().max { guerrero => guerrero.criterio}
+    }
+
+    method tirameCualquiera() {
         return self.guerreros().anyOne()
     }
 }
